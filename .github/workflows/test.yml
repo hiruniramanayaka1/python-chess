@@ -23,6 +23,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: .github/workflows/setup-${{ matrix.os }}.sh
         shell: bash
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       - run: pip install -e .
       - run: python test.py -v
   perft:
